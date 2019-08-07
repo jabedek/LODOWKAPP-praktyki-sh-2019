@@ -1,10 +1,19 @@
-
 export const loadState = () => {
   const initialState = {
     notes: [],
-    products: [],
+    products: [
+      {
+        name: 'Przeterminowane mleko',
+        tagPosition: { top: 160, left: 200 },
+        addedBy: 'USER X',
+        expirationDate: { year: 2019, month: 6, day: 25 },
+        id: 25160200,
+        shownPopup: false,
+        vitalityColor: ''
+      }
+    ],
     users: [],
-    auth: ["-1"]
+    auth: ['-1']
   };
 
   try {

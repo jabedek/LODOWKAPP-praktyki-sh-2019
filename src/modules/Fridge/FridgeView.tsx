@@ -4,7 +4,12 @@ import FridgeService from './FridgeService';
 import Loader from 'react-loader-spinner';
 import ProductTag from './ProductTag';
 import { IProduct } from '../../common/interfaces/Product';
-import { ADD_PRODUCT, DELETE_PRODUCT, DELETE_PRODUCTS, UPDATE_PRODUCT} from "../../store/actions/ProductActions"
+import {
+  ADD_PRODUCT,
+  DELETE_PRODUCT,
+  DELETE_PRODUCTS,
+  UPDATE_PRODUCT
+} from '../../store/actions/ProductActions';
 import { connect } from 'react-redux';
 import StoreType from '../../common/types/StoreType';
 import { expirationColorChecker } from '../../common/components/ProductExpireChecker/ProductExpireService';
@@ -19,10 +24,10 @@ interface ProductTagData {
 }
 
 export interface FridgeViewProps extends Pick<StoreType, 'products'> {
-    addProduct, 
-    deleteProduct,
-    deleteProducts,
-    updateProduct,
+  addProduct;
+  deleteProduct;
+  deleteProducts;
+  updateProduct;
 }
 
 export interface FridgeViewState {
@@ -35,16 +40,17 @@ export interface FridgeViewState {
 
 const mapDispatchToProps = dispatch => {
   return {
-    addProduct: (product: IProduct) => dispatch({ type: ADD_PRODUCT, payload: product }),
-    deleteProduct: (productId: number) => dispatch({ type: DELETE_PRODUCT, payload: productId }),
-    deleteProducts: () => dispatch({ type: DELETE_PRODUCTS}),
-    updateProduct: (product: IProduct) => dispatch({ type: UPDATE_PRODUCT, payload: product }),
+    addProduct: (product: IProduct) =>
+      dispatch({ type: ADD_PRODUCT, payload: product }),
+    deleteProduct: (productId: number) =>
+      dispatch({ type: DELETE_PRODUCT, payload: productId }),
+    deleteProducts: () => dispatch({ type: DELETE_PRODUCTS }),
+    updateProduct: (product: IProduct) =>
+      dispatch({ type: UPDATE_PRODUCT, payload: product })
+  };
+};
 
-  }
-}
-
-
-const mapStateToProps = state => ({products: state.products})
+const mapStateToProps = state => ({ products: state.products });
 
 class FridgeView extends React.Component<FridgeViewProps, FridgeViewState> {
   state = {
@@ -62,7 +68,14 @@ class FridgeView extends React.Component<FridgeViewProps, FridgeViewState> {
 
   componentDidUpdate() {
     console.log(this.state.products);
-    this.props.products.map(product => product.vitalityColor = expirationColorChecker(product.expirationDate.day, product.expirationDate.month, product.expirationDate.year));
+    this.props.products.map(
+      product =>
+        (product.vitalityColor = expirationColorChecker(
+          product.expirationDate.day,
+          product.expirationDate.month,
+          product.expirationDate.year
+        ))
+    );
   }
 
   removeAll = () => {
@@ -83,7 +96,11 @@ class FridgeView extends React.Component<FridgeViewProps, FridgeViewState> {
       month: new Date().getMonth(),
       day: new Date().getDate()
     };
-const vitalityColorChecker = expirationColorChecker(expirationDate.day, expirationDate.month, expirationDate.year)
+    const vitalityColorChecker = expirationColorChecker(
+      expirationDate.day,
+      expirationDate.month,
+      expirationDate.year
+    );
     let product: IProduct = {
       name: 'PRODUCT',
       tagPosition,
@@ -91,18 +108,21 @@ const vitalityColorChecker = expirationColorChecker(expirationDate.day, expirati
       expirationDate,
       id: +('' + expirationDate.day + tagPosition.left + tagPosition.top),
       shownPopup: true,
-      vitalityColor:  vitalityColorChecker,
+      vitalityColor: vitalityColorChecker
     };
 
     let { products } = this.props;
     products.forEach(prod => {
       prod.shownPopup = false;
-      console.log(prod.expirationDate)
-      prod.vitalityColor = expirationColorChecker(prod.expirationDate.day, prod.expirationDate.month, prod.expirationDate.year)
-console.log(prod.vitalityColor)    
+      console.log(prod.expirationDate);
+      prod.vitalityColor = expirationColorChecker(
+        prod.expirationDate.day,
+        prod.expirationDate.month,
+        prod.expirationDate.year
+      );
+      console.log(prod.vitalityColor);
     });
-    
-    
+
     this.props.addProduct(product);
     this.setState({
       nextId: this.state.nextId + 1,
@@ -142,7 +162,11 @@ console.log(prod.vitalityColor)
     products.forEach(product => {
       if (product.id === id) product.shownPopup = !product.shownPopup;
       else product.shownPopup = false;
-      product.vitalityColor = expirationColorChecker(product.expirationDate.day, product.expirationDate.month, product.expirationDate.year)
+      product.vitalityColor = expirationColorChecker(
+        product.expirationDate.day,
+        product.expirationDate.month,
+        product.expirationDate.year
+      );
     });
 
     this.setState({ products });
@@ -159,9 +183,9 @@ console.log(prod.vitalityColor)
     return (
       <div>
         <div className="popup__actions">
-          <button className="product-tag__delete" onClick={this.removeAll}>
+          {/* <button className="product-tag__delete" onClick={this.removeAll}>
             Remove all
-          </button>
+          </button> */}
         </div>
         <div className="fridge">
           {this.state.src ? (
@@ -184,11 +208,16 @@ console.log(prod.vitalityColor)
             </div>
           )}
 
-          <ul className="fridge__list">{this.state.src && this.listProductTags()}</ul>
+          <ul className="fridge__list">
+            {this.state.src && this.listProductTags()}
+          </ul>
         </div>
       </div>
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(FridgeView);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FridgeView);

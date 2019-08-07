@@ -32,7 +32,8 @@ class ProductTag extends React.Component<ProductTagProps, ProductTagState> {
 
   setPopupModifier() {
     const clientHeight = document.documentElement.clientHeight;
-    const diff = clientHeight - +this.state.product.tagPosition;
+    const diff = clientHeight - +this.state.product.tagPosition.top;
+    console.log('diff', clientHeight, this.state.product.tagPosition, diff);
     if (diff >= POPUP_SWITCH_VALUE)
       this.setState({ popupModifier: '--rotated' });
   }
@@ -175,7 +176,7 @@ class ProductTag extends React.Component<ProductTagProps, ProductTagState> {
   popup = () => {
     /*  Return Popup that shows - depending on show-Name/Date-Input - inputs or displays. OnClick on either input and display causes them to switch their visibility / places. Below that Popup shows Remove button.
      */
-    
+
     return (
       <div className={`popup${this.state.popupModifier}`}>
         <div className="popup__inner">
@@ -212,10 +213,11 @@ class ProductTag extends React.Component<ProductTagProps, ProductTagState> {
                       })
                     }
                   >
-                    <ProductExpireChecker productDay={this.state.product.expirationDate.day}
-                                productMounth={this.state.product.expirationDate.month}
-                                productYear={this.state.product.expirationDate.year}
-                            />
+                    <ProductExpireChecker
+                      productDay={this.state.product.expirationDate.day}
+                      productMounth={this.state.product.expirationDate.month}
+                      productYear={this.state.product.expirationDate.year}
+                    />
                   </div>
                 </div>
               )}
